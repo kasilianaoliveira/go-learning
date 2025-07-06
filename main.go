@@ -30,6 +30,12 @@ func getPizzas(c *gin.Context) {
 		})
 		return 
 	}
+
+	c.JSON(http.StatusNotFound, gin.H {
+		"message": "No pizzas found",
+		"pizzas": []models.Pizza{},
+	})
+
 }
 func createPizzas(c *gin.Context){
 	var newPizza models.Pizza
@@ -67,8 +73,9 @@ func getPizzaById(c *gin.Context){
 			return
 		} 
 	}
-	c.JSON(http.StatusNotFound, gin.H{
-			"erro": "Pizza não encontrada",
+
+	c.JSON(http.StatusNotFound, gin.H {
+		"message": "Pizza not found",
 	})
 }
 
