@@ -1,0 +1,22 @@
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+*.test
+
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+
+
+# Go workspace file
+go.work
+go.work.sum
+
+.env
+
