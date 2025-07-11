@@ -12,13 +12,16 @@ import (
 )
 
 var pizzas []models.Pizza 
+const pizzaByIDRoute = "/pizzas/:id"
+
 func main(){
 	loadPizzas()
 	router := gin.Default()
   router.GET("/pizzas", getPizzas)
 	router.POST("/pizzas", createPizzas)
-	router.GET("/pizzas/:id", getPizzaById)
-
+	router.GET(pizzaByIDRoute, getPizzaById)
+	router.DELETE(pizzaByIDRoute, deletePizzaById)
+	router.PUT(pizzaByIDRoute, updatePizzaById)
   router.Run()
 }
 
@@ -78,6 +81,37 @@ func getPizzaById(c *gin.Context){
 		"message": "Pizza not found",
 	})
 }
+
+func deletePizzaById(c *gin.Context){
+	idParam := c.Param("id")
+	idConverted, err := strconv.Atoi(idParam)
+	if(err != nil) {
+		c.JSON(http.StatusNotFound, gin.H{
+			"erro": err.Error(),
+		})
+		return
+	}
+	for i, p := range pizzas {
+		if p.ID == idConverted{
+			pizzas = append(pizzas[:i],pizzas[i+1:]... )
+			savePizzas()
+			c.JSON(200, gin.H{
+					"message": "Pizza deleted successfully",
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{
+		"message": "Pizza not found",
+	})
+}
+func updatePizzaById(c *gin.Context){
+		c.JSON(200, gin.H{
+		"message": "Pizza updated",
+	})
+}
+
 
 func loadPizzas(){
 	file, err := os.Open("dados/pizzas.json")
